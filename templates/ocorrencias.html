@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Cadastrar Ocorrência</h2>
+
+    <form method="POST" action="{{ url_for('ocorrencias') }}">
+        {{ form.hidden_tag() }}  <!-- Proteção contra CSRF -->
+        
+        <!-- Campo para a disciplina -->
+        <div class="form-group">
+            {{ form.role.label(class="form-label") }}
+            {{ form.role(class="form-control") }}
+        </div>
+
+        <!-- Campo para a data -->
+        <div class="form-group">
+            {{ form.date.label(class="form-label") }}
+            {{ form.date(class="form-control") }}
+        </div>
+
+        <!-- Campo para a descrição -->
+        <div class="form-group">
+            {{ form.description.label(class="form-label") }}
+            {{ form.description(class="form-control") }}
+        </div>
+
+        <!-- Botão de submit -->
+        <div class="form-group">
+            {{ form.submit(class="btn btn-primary") }}
+        </div>
+    </form>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="alert alert-success">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    <hr>
+
+    <h3>Ocorrências Registradas</h3>
+    <p>Total de Ocorrências: {{ occurrences_count }}</p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Disciplina</th>
+                <th>Data</th>
+                <th>Descrição</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for occurrence in occurrences_all %}
+                <tr>
+                    <td>{{ occurrence.role }}</td>
+                    <td>{{ occurrence.date }}</td>
+                    <td>{{ occurrence.description }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="3">Nenhuma ocorrência registrada.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
